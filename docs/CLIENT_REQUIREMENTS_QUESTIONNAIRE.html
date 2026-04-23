@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Requirements Questionnaire — Kokuro Beauty Space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink-50:  #fff0f6;
+      --pink-100: #ffd6e7;
+      --pink-200: #ffadd2;
+      --pink-400: #f783ac;
+      --pink-500: #e64980;
+      --pink-600: #c2255c;
+      --rose-400: #f06595;
+      --nude-50:  #fdf8f5;
+      --nude-100: #f5ece6;
+      --nude-200: #e8d5cb;
+      --nude-300: #d4b5a8;
+      --green-50: #f0fdf4;
+      --green-400: #4ade80;
+      --green-600: #16a34a;
+      --gray-50:  #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+      --shadow-lg: 0 10px 40px rgba(0,0,0,.10), 0 4px 12px rgba(0,0,0,.05);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--nude-50);
+      color: var(--gray-800);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    /* ─── PROGRESS BAR ─────────────────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--pink-500), var(--rose-400));
+      z-index: 9999;
+      transition: width .1s;
+    }
+
+    /* ─── SIDEBAR NAV ──────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 50%;
+      right: 24px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 100;
+    }
+
+    .sidebar a {
+      display: block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--nude-200);
+      transition: all .25s;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: var(--pink-500);
+      transform: scale(1.4);
+    }
+
+    /* ─── HEADER ───────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #1a0a13 0%, #3d1a2e 50%, #2d0f20 100%);
+      color: white;
+      padding: 70px 40px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(230,73,128,.25) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(247,131,172,.15) 0%, transparent 50%);
+    }
+
+    header::after {
+      content: '✦ ✦ ✦';
+      position: absolute;
+      bottom: 20px;
+      right: 40px;
+      font-size: 12px;
+      letter-spacing: 8px;
+      color: rgba(255,255,255,.15);
+    }
+
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      backdrop-filter: blur(10px);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--pink-200);
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 46px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    header h2 {
+      font-size: 16px;
+      font-weight: 400;
+      color: rgba(255,255,255,.6);
+      margin-bottom: 32px;
+    }
+
+    .meta-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      color: rgba(255,255,255,.8);
+    }
+
+    .meta-item a {
+      color: var(--pink-200);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .meta-item a:hover { text-decoration: underline; }
+
+    /* ─── MAIN LAYOUT ──────────────────────────────────── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ─── PURPOSE SECTION ──────────────────────────────── */
+    .purpose-card {
+      background: linear-gradient(135deg, var(--pink-50), #fff8fc);
+      border: 1px solid var(--pink-100);
+      border-left: 4px solid var(--pink-500);
+      border-radius: var(--radius-md);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .purpose-card p {
+      font-size: 15px;
+      color: var(--gray-700);
+      line-height: 1.8;
+    }
+
+    /* ─── AUTOSAVE BANNER ──────────────────────────────── */
+    .save-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: var(--green-50);
+      border: 1.5px solid #bbf7d0;
+      border-radius: var(--radius-md);
+      padding: 16px 24px;
+      margin-bottom: 32px;
+      font-size: 13px;
+      color: var(--green-600);
+    }
+
+    .save-banner .save-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+    }
+
+    .save-status { font-weight: 400; color: var(--gray-400); font-style: italic; }
+
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 100px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, opacity .15s;
+    }
+
+    .btn:hover { transform: translateY(-1px); opacity: .9; }
+
+    .btn-pink {
+      background: linear-gradient(135deg, var(--pink-500), var(--rose-400));
+      color: white;
+      box-shadow: 0 3px 12px rgba(230,73,128,.3);
+    }
+
+    .btn-outline {
+      background: white;
+      color: var(--pink-600);
+      border: 1.5px solid var(--pink-200);
+    }
+
+    .btn-outline:hover { background: var(--pink-50); }
+
+    .btn-gray {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+
+    .print-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--pink-500), var(--rose-400));
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 0 auto 40px;
+      box-shadow: 0 4px 16px rgba(230,73,128,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(230,73,128,.45);
+    }
+
+    /* ─── SECTION CARD ─────────────────────────────────── */
+    .section-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 32px;
+      overflow: hidden;
+      transition: box-shadow .25s;
+    }
+
+    .section-header {
+      padding: 28px 36px 24px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    .section-icon {
+      font-size: 28px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .section-meta { flex: 1; }
+
+    .section-number {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--pink-500);
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 6px;
+    }
+
+    .section-goal {
+      font-size: 13px;
+      color: var(--gray-400);
+      font-style: italic;
+    }
+
+    .section-body { padding: 28px 36px 32px; }
+
+    /* ─── SUBSECTION ───────────────────────────────────── */
+    .subsection { margin-bottom: 28px; }
+    .subsection:last-child { margin-bottom: 0; }
+
+    .subsection-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--pink-600);
+      border-bottom: 2px dashed var(--pink-100);
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+
+    /* ─── QUESTION ITEMS ───────────────────────────────── */
+    .question-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+
+    .question-item {
+      border-radius: var(--radius-md);
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .question-item:focus-within {
+      border-color: var(--pink-300, #f9a8d4);
+      box-shadow: 0 0 0 3px rgba(230,73,128,.08);
+    }
+
+    .question-item.answered {
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .question-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px 10px;
+    }
+
+    .q-num {
+      min-width: 30px; height: 30px;
+      background: linear-gradient(135deg, var(--pink-500), var(--rose-400));
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(230,73,128,.3);
+      margin-top: 2px;
+    }
+
+    .question-item.answered .q-num {
+      background: linear-gradient(135deg, var(--green-600), #22c55e);
+      box-shadow: 0 2px 8px rgba(22,163,74,.25);
+    }
+
+    .q-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-700);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* ─── ANSWER TEXTAREA ──────────────────────────────── */
+    .answer-wrap {
+      padding: 0 18px 14px 62px;
+    }
+
+    .answer-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--pink-500);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .question-item.answered .answer-label {
+      color: var(--green-600);
+    }
+
+    .answer-label::before {
+      content: '✏️';
+      font-size: 11px;
+    }
+
+    .answer-box {
+      width: 100%;
+      min-height: 72px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--gray-800);
+      background: white;
+      resize: vertical;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s, min-height .2s;
+    }
+
+    .answer-box::placeholder {
+      color: var(--gray-400);
+      font-style: italic;
+    }
+
+    .answer-box:focus {
+      border-color: var(--pink-400);
+      box-shadow: 0 0 0 3px rgba(230,73,128,.08);
+      min-height: 100px;
+    }
+
+    .question-item.answered .answer-box {
+      border-color: #86efac;
+      background: white;
+    }
+
+    /* ─── CHECKLIST TABLE ──────────────────────────────── */
+    .asset-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .asset-table thead th {
+      background: linear-gradient(135deg, var(--pink-500), var(--rose-400));
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .asset-table thead th:first-child { border-radius: var(--radius-sm) 0 0 0; width: 50px; }
+    .asset-table thead th:last-child  { border-radius: 0 var(--radius-sm) 0 0; width: 80px; text-align: center; }
+
+    .asset-table tbody tr {
+      border-bottom: 1px solid var(--gray-100);
+      transition: background .15s;
+    }
+
+    .asset-table tbody tr:hover { background: var(--pink-50); }
+    .asset-table tbody tr:last-child { border-bottom: none; }
+
+    .asset-table td {
+      padding: 13px 16px;
+      color: var(--gray-700);
+      vertical-align: middle;
+    }
+
+    .asset-table td:first-child {
+      font-weight: 700;
+      color: var(--pink-500);
+      text-align: center;
+    }
+
+    .asset-table td:last-child { text-align: center; }
+
+    .check-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px; height: 22px;
+      border: 2px solid var(--pink-200);
+      border-radius: 5px;
+      background: white;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .check-box:hover {
+      border-color: var(--pink-500);
+      background: var(--pink-50);
+    }
+
+    .check-box.checked {
+      background: var(--pink-500);
+      border-color: var(--pink-500);
+    }
+
+    .check-box.checked::after {
+      content: '✓';
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* ─── NOTES SECTION ────────────────────────────────── */
+    .notes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .notes-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .notes-field label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--pink-600);
+    }
+
+    .notes-field input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+
+    .notes-field input:focus {
+      border-color: var(--pink-400);
+      box-shadow: 0 0 0 3px rgba(230,73,128,.1);
+      background: white;
+    }
+
+    .method-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .method-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--gray-50);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 100px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+
+    .method-chip input { display: none; }
+
+    .method-chip:hover {
+      border-color: var(--pink-400);
+      color: var(--pink-600);
+    }
+
+    .method-chip.selected {
+      background: var(--pink-50);
+      border-color: var(--pink-500);
+      color: var(--pink-600);
+      font-weight: 600;
+    }
+
+    textarea#notes-content {
+      width: 100%;
+      min-height: 150px;
+      padding: 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      resize: vertical;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    textarea#notes-content:focus {
+      border-color: var(--pink-400);
+      box-shadow: 0 0 0 3px rgba(230,73,128,.1);
+      background: white;
+    }
+
+    /* ─── SIGNOFF TABLE ────────────────────────────────── */
+    .signoff-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .signoff-table thead th {
+      background: var(--gray-800);
+      color: white;
+      padding: 12px 20px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .signoff-table tbody tr { border-bottom: 1px solid var(--gray-100); }
+    .signoff-table tbody tr:last-child { border-bottom: none; }
+
+    .signoff-table td {
+      padding: 18px 20px;
+      vertical-align: middle;
+    }
+
+    .signoff-table td:first-child {
+      font-weight: 700;
+      color: var(--gray-900);
+      width: 120px;
+    }
+
+    .signoff-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: none;
+      border-bottom: 1.5px solid var(--gray-200);
+      background: transparent;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--gray-800);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .signoff-input:focus { border-color: var(--pink-400); }
+
+    /* ─── PROGRESS SUMMARY ─────────────────────────────── */
+    .progress-summary {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .progress-summary .prog-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-600);
+      white-space: nowrap;
+    }
+
+    .progress-bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: var(--gray-100);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--pink-500), var(--rose-400));
+      border-radius: 100px;
+      transition: width .4s;
+    }
+
+    .prog-count {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--pink-500);
+      white-space: nowrap;
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────── */
+    footer {
+      background: linear-gradient(135deg, #1a0a13, #2d0f20);
+      color: rgba(255,255,255,.5);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 13px;
+    }
+
+    footer span { color: var(--pink-400); }
+
+    /* ─── PRINT ────────────────────────────────────────── */
+    @media print {
+      .sidebar, .save-banner, .print-btn, #progress-bar, .progress-summary { display: none; }
+      body { background: white; }
+      .section-card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+      .answer-box {
+        border: 1px solid #ccc;
+        min-height: 60px;
+        background: white;
+      }
+      footer { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 48px 24px 40px; }
+      .section-header { padding: 20px 24px 16px; }
+      .section-body { padding: 20px 24px 24px; }
+      .answer-wrap { padding-left: 18px; }
+      .notes-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .progress-summary { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- Sidebar Navigation Dots -->
+<nav class="sidebar" aria-label="Section navigation">
+  <a href="#bagian1" title="Profil Usaha"></a>
+  <a href="#bagian2" title="Alur Kerja"></a>
+  <a href="#bagian3" title="Pain Points"></a>
+  <a href="#bagian4" title="Fitur Sistem"></a>
+  <a href="#bagian5" title="Desain & Branding"></a>
+  <a href="#bagian6" title="Teknis"></a>
+  <a href="#bagian7" title="Target & Ekspektasi"></a>
+  <a href="#bagian8" title="Aset Klien"></a>
+  <a href="#catatan" title="Catatan"></a>
+  <a href="#signoff" title="Sign-off"></a>
+</nav>
+
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <div class="header-badge">📋 Requirements Gathering Document</div>
+    <h1>Client Requirements Questionnaire</h1>
+    <h2>Kokuro Beauty Space — Web Profile &amp; Booking System</h2>
+    <div class="meta-grid">
+      <div class="meta-item">🚀 <strong>Project:</strong>&nbsp; Web Profile + Booking + WhatsApp Bot</div>
+      <div class="meta-item">💼 <strong>Client:</strong>&nbsp; Kokuro Beauty Space</div>
+      <div class="meta-item">📸 <strong>Instagram:</strong>&nbsp; <a href="https://instagram.com/kokurobeautyy" target="_blank">@kokurobeautyy</a></div>
+      <div class="meta-item">📅 <strong>Date:</strong>&nbsp; April 2026</div>
+      <div class="meta-item">📄 <strong>Version:</strong>&nbsp; v1.0</div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── TUJUAN ──────────────────────────────────────── -->
+  <div class="purpose-card">
+    <p>
+      Dokumen ini berisi daftar pertanyaan yang perlu diajukan kepada klien untuk menggali kebutuhan, permasalahan operasional, alur kerja usaha, serta ekspektasi hasil dari sistem yang akan dibangun. Jawaban atas pertanyaan-pertanyaan ini menjadi <strong>dasar dalam proses analisis kebutuhan sistem</strong> (requirements analysis) dan perancangan solusi teknologi yang tepat.
+    </p>
+  </div>
+
+  <!-- ── AUTOSAVE BANNER ─────────────────────────────── -->
+  <div class="save-banner">
+    <div class="save-left">
+      💾 Jawaban tersimpan otomatis di browser
+      <span class="save-status" id="save-status">· Siap</span>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-pink" onclick="window.print()">🖨️ Print / PDF</button>
+      <button class="btn btn-outline" onclick="exportJSON()">📤 Export JSON</button>
+      <button class="btn btn-gray" onclick="clearAll()">🗑️ Reset Semua</button>
+    </div>
+  </div>
+
+  <!-- ── PROGRESS ────────────────────────────────────── -->
+  <div class="progress-summary">
+    <span class="prog-label">Progress Jawaban</span>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+    <span class="prog-count" id="prog-count">0 / 68</span>
+  </div>
+
+  <!-- ── BAGIAN 1 ─────────────────────────────────────── -->
+  <div class="section-card" id="bagian1">
+    <div class="section-header">
+      <div class="section-icon">🏠</div>
+      <div class="section-meta">
+        <div class="section-number">Bagian 1</div>
+        <div class="section-title">Profil &amp; Informasi Umum Usaha</div>
+        <div class="section-goal">Tujuan: Memahami identitas dan latar belakang bisnis klien.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ol class="question-list">
+        <li class="question-item" id="qi-1">
+          <div class="question-top"><span class="q-num">1</span><span class="q-text">Siapa nama pemilik usaha dan sudah berapa lama Kokuro Beauty Space berdiri?</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="1" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-2">
+          <div class="question-top"><span class="q-num">2</span><span class="q-text">Di mana lokasi usaha (alamat lengkap)? Apakah ada lebih dari satu cabang?</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="2" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-3">
+          <div class="question-top"><span class="q-num">3</span><span class="q-text">Apa saja layanan utama yang ditawarkan saat ini? (contoh: nail art, eyelash, eyebrow, dll.)</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="3" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-4">
+          <div class="question-top"><span class="q-num">4</span><span class="q-text">Apakah ada layanan yang bersifat musiman atau promo berkala?</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="4" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-5">
+          <div class="question-top"><span class="q-num">5</span><span class="q-text">Berapa rata-rata jumlah pelanggan per hari atau per minggu?</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="5" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-6">
+          <div class="question-top"><span class="q-num">6</span><span class="q-text">Siapa segmen target pelanggan utama? (usia, profesi, gender, dll.)</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="6" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-7">
+          <div class="question-top"><span class="q-num">7</span><span class="q-text">Apakah usaha dijalankan secara solo (satu terapis) atau sudah ada karyawan/tim?</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="7" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-8">
+          <div class="question-top"><span class="q-num">8</span><span class="q-text">Berapa rata-rata jam operasional per hari? Apakah ada hari libur rutin?</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="8" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-9">
+          <div class="question-top"><span class="q-num">9</span><span class="q-text">Apakah sudah memiliki brand identity resmi (logo, warna brand, tagline)?</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="9" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+        <li class="question-item" id="qi-10">
+          <div class="question-top"><span class="q-num">10</span><span class="q-text">Apakah ada kompetitor lokal yang dijadikan referensi atau pembanding?</span></div>
+          <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="10" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ── BAGIAN 2 ─────────────────────────────────────── -->
+  <div class="section-card" id="bagian2">
+    <div class="section-header">
+      <div class="section-icon">📱</div>
+      <div class="section-meta">
+        <div class="section-number">Bagian 2</div>
+        <div class="section-title">Proses &amp; Alur Kerja Operasional</div>
+        <div class="section-goal">Tujuan: Memahami alur bisnis dari awal pemesanan hingga selesai transaksi.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <div class="subsection-title">2.1 — Alur Booking / Pemesanan</div>
+        <ol class="question-list">
+          <li class="question-item" id="qi-11">
+            <div class="question-top"><span class="q-num">11</span><span class="q-text">Saat ini, bagaimana pelanggan melakukan pemesanan layanan? (WhatsApp, DM IG, datang langsung, telepon?)</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="11" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-12">
+            <div class="question-top"><span class="q-num">12</span><span class="q-text">Apakah booking dilakukan berbasis waktu/slot (jam tertentu) atau antri bebas?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="12" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-13">
+            <div class="question-top"><span class="q-num">13</span><span class="q-text">Berapa lama rata-rata durasi setiap layanan? (misal: nail art 90 menit, eyelash 60 menit)</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="13" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-14">
+            <div class="question-top"><span class="q-num">14</span><span class="q-text">Apakah ada batas maksimum booking per hari atau per slot?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="14" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-15">
+            <div class="question-top"><span class="q-num">15</span><span class="q-text">Apakah pelanggan bisa booking beberapa layanan sekaligus dalam satu kunjungan?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="15" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-16">
+            <div class="question-top"><span class="q-num">16</span><span class="q-text">Apakah ada sistem konfirmasi booking sekarang? (manual reply WA, dsb.)</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="16" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-17">
+            <div class="question-top"><span class="q-num">17</span><span class="q-text">Apakah ada deposit/DP untuk mengamankan slot booking?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="17" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-18">
+            <div class="question-top"><span class="q-num">18</span><span class="q-text">Bagaimana jika pelanggan ingin membatalkan atau reschedule booking?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="18" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-19">
+            <div class="question-top"><span class="q-num">19</span><span class="q-text">Seberapa jauh ke depan pelanggan bisa melakukan booking? (H+1, H+7, bebas?)</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="19" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+        </ol>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">2.2 — Pembayaran</div>
+        <ol class="question-list">
+          <li class="question-item" id="qi-20">
+            <div class="question-top"><span class="q-num">20</span><span class="q-text">Metode pembayaran apa saja yang diterima saat ini? (Cash, Transfer, QRIS, dll.)</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="20" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-21">
+            <div class="question-top"><span class="q-num">21</span><span class="q-text">Apakah ada integrasi payment gateway yang diinginkan di sistem baru?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="21" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-22">
+            <div class="question-top"><span class="q-num">22</span><span class="q-text">Apakah harga layanan bersifat tetap (fixed) atau bisa bervariasi berdasarkan desain/kompleksitas?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="22" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+        </ol>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">2.3 — Pasca Layanan</div>
+        <ol class="question-list">
+          <li class="question-item" id="qi-23">
+            <div class="question-top"><span class="q-num">23</span><span class="q-text">Apakah ada follow-up ke pelanggan setelah layanan selesai? (reminder perawatan, promo, dll.)</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="23" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-24">
+            <div class="question-top"><span class="q-num">24</span><span class="q-text">Apakah ada sistem review/testimoni dari pelanggan saat ini?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="24" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+          <li class="question-item" id="qi-25">
+            <div class="question-top"><span class="q-num">25</span><span class="q-text">Apakah pelanggan loyal diberikan perlakuan khusus seperti loyalty points atau diskon?</span></div>
+            <div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="25" placeholder="Tulis jawaban klien di sini..."></textarea></div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BAGIAN 3 ─────────────────────────────────────── -->
+  <div class="section-card" id="bagian3">
+    <div class="section-header">
+      <div class="section-icon">❗</div>
+      <div class="section-meta">
+        <div class="section-number">Bagian 3</div>
+        <div class="section-title">Permasalahan &amp; Pain Points</div>
+        <div class="section-goal">Tujuan: Mengidentifikasi masalah operasional yang ingin diselesaikan oleh sistem baru.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ol class="question-list">
+        <li class="question-item" id="qi-26"><div class="question-top"><span class="q-num">26</span><span class="q-text">Apa masalah terbesar yang dialami dalam mengelola booking saat ini?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="26" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-27"><div class="question-top"><span class="q-num">27</span><span class="q-text">Apakah sering terjadi double booking atau bentrokan jadwal? Seberapa sering?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="27" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-28"><div class="question-top"><span class="q-num">28</span><span class="q-text">Apakah banyak pelanggan yang tidak hadir (no-show) setelah booking?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="28" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-29"><div class="question-top"><span class="q-num">29</span><span class="q-text">Apakah membalas pesan booking secara manual di WA/IG memakan banyak waktu?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="29" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-30"><div class="question-top"><span class="q-num">30</span><span class="q-text">Apakah pernah kehilangan pelanggan karena respon terlalu lama?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="30" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-31"><div class="question-top"><span class="q-num">31</span><span class="q-text">Apakah ada kesulitan dalam memantau jadwal yang sudah terisi dan yang masih tersedia?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="31" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-32"><div class="question-top"><span class="q-num">32</span><span class="q-text">Apakah ada keluhan dari pelanggan mengenai proses booking yang saat ini berlaku?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="32" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-33"><div class="question-top"><span class="q-num">33</span><span class="q-text">Informasi apa yang paling sering ditanyakan ulang oleh pelanggan? (harga, jam buka, cara booking, dll.)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="33" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-34"><div class="question-top"><span class="q-num">34</span><span class="q-text">Apakah ada kesulitan dalam mempromosikan layanan atau portofolio karya secara online?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="34" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-35"><div class="question-top"><span class="q-num">35</span><span class="q-text">Apakah ada masalah dalam pelacakan pendapatan atau laporan keuangan dasar?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="35" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ── BAGIAN 4 ─────────────────────────────────────── -->
+  <div class="section-card" id="bagian4">
+    <div class="section-header">
+      <div class="section-icon">💻</div>
+      <div class="section-meta">
+        <div class="section-number">Bagian 4</div>
+        <div class="section-title">Kebutuhan Sistem &amp; Fitur Website</div>
+        <div class="section-goal">Tujuan: Menentukan fitur dan fungsionalitas yang diprioritaskan dalam sistem baru.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="subsection">
+        <div class="subsection-title">4.1 — Web Profile</div>
+        <ol class="question-list">
+          <li class="question-item" id="qi-36"><div class="question-top"><span class="q-num">36</span><span class="q-text">Informasi apa saja yang WAJIB ada di halaman utama website? (profil, layanan, harga, galeri, kontak?)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="36" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-37"><div class="question-top"><span class="q-num">37</span><span class="q-text">Apakah ingin ada halaman khusus untuk menampilkan portfolio/galeri karya?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="37" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-38"><div class="question-top"><span class="q-num">38</span><span class="q-text">Apakah perlu halaman testimoni atau review dari pelanggan?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="38" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-39"><div class="question-top"><span class="q-num">39</span><span class="q-text">Apakah ada konten blog atau artikel yang ingin ditampilkan?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="39" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-40"><div class="question-top"><span class="q-num">40</span><span class="q-text">Apakah website perlu tampil dalam Bahasa Indonesia saja, atau bilingual (ID/EN)?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="40" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        </ol>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">4.2 — Sistem Booking Online</div>
+        <ol class="question-list">
+          <li class="question-item" id="qi-41"><div class="question-top"><span class="q-num">41</span><span class="q-text">Fitur apa yang paling diinginkan dari sistem booking online? (pilih layanan, pilih waktu, isi data, konfirmasi otomatis?)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="41" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-42"><div class="question-top"><span class="q-num">42</span><span class="q-text">Apakah perlu fitur login/daftar akun untuk pelanggan, atau cukup booking tanpa akun?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="42" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-43"><div class="question-top"><span class="q-num">43</span><span class="q-text">Apakah perlu dashboard admin untuk melihat semua booking yang masuk?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="43" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-44"><div class="question-top"><span class="q-num">44</span><span class="q-text">Apakah perlu fitur pengingat otomatis (reminder) ke pelanggan sebelum jadwal? (H-1, H-3?)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="44" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-45"><div class="question-top"><span class="q-num">45</span><span class="q-text">Apakah perlu laporan booking dalam bentuk rangkuman harian/mingguan?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="45" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        </ol>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">4.3 — WhatsApp Bot / Automasi</div>
+        <ol class="question-list">
+          <li class="question-item" id="qi-46"><div class="question-top"><span class="q-num">46</span><span class="q-text">Pesan WhatsApp apa yang paling sering masuk dan perlu dijawab secara otomatis?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="46" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-47"><div class="question-top"><span class="q-num">47</span><span class="q-text">Apakah bot WA cukup untuk FAQ saja, atau perlu bisa langsung memproses booking?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="47" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-48"><div class="question-top"><span class="q-num">48</span><span class="q-text">Apakah ingin bot WA menggunakan nomor WA yang sudah ada atau nomor baru?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="48" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+          <li class="question-item" id="qi-49"><div class="question-top"><span class="q-num">49</span><span class="q-text">Seberapa "cerdas" bot yang diharapkan? (predefined Q&amp;A, atau AI yang lebih fleksibel?)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="49" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BAGIAN 5 ─────────────────────────────────────── -->
+  <div class="section-card" id="bagian5">
+    <div class="section-header">
+      <div class="section-icon">🎨</div>
+      <div class="section-meta">
+        <div class="section-number">Bagian 5</div>
+        <div class="section-title">Desain &amp; Branding</div>
+        <div class="section-goal">Tujuan: Menyelaraskan tampilan sistem dengan identitas visual usaha.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ol class="question-list">
+        <li class="question-item" id="qi-50"><div class="question-top"><span class="q-num">50</span><span class="q-text">Warna brand apa yang ingin digunakan di website? (sebutkan atau kirim referensi)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="50" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-51"><div class="question-top"><span class="q-num">51</span><span class="q-text">Apakah ada referensi website sejenis yang tampilannya disukai? (bisa dari kompetitor, internasional, dll.)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="51" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-52"><div class="question-top"><span class="q-num">52</span><span class="q-text">Bagaimana tone/suasana yang ingin ditampilkan? (elegan, minimalis, playful, feminine, luxury, dll.)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="52" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-53"><div class="question-top"><span class="q-num">53</span><span class="q-text">Apakah sudah ada logo resmi dalam format digital? (SVG/PNG transparan?)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="53" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-54"><div class="question-top"><span class="q-num">54</span><span class="q-text">Apakah ada foto produk/layanan berkualitas tinggi yang bisa digunakan di website?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="54" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-55"><div class="question-top"><span class="q-num">55</span><span class="q-text">Apakah ada font atau style tipografi tertentu yang disukai?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="55" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ── BAGIAN 6 ─────────────────────────────────────── -->
+  <div class="section-card" id="bagian6">
+    <div class="section-header">
+      <div class="section-icon">🔐</div>
+      <div class="section-meta">
+        <div class="section-number">Bagian 6</div>
+        <div class="section-title">Teknis &amp; Operasional Sistem</div>
+        <div class="section-goal">Tujuan: Memastikan infrastruktur dan pengelolaan sistem sesuai kapasitas klien.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ol class="question-list">
+        <li class="question-item" id="qi-56"><div class="question-top"><span class="q-num">56</span><span class="q-text">Apakah klien memiliki domain (nama website) yang sudah dibeli, atau perlu dibuatkan?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="56" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-57"><div class="question-top"><span class="q-num">57</span><span class="q-text">Apakah sudah ada hosting, atau perlu direkomendasikan layanan hosting?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="57" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-58"><div class="question-top"><span class="q-num">58</span><span class="q-text">Siapa yang akan mengelola konten website setelah selesai dibangun? (klien sendiri, atau diserahkan ke developer?)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="58" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-59"><div class="question-top"><span class="q-num">59</span><span class="q-text">Apakah diperlukan fitur CMS (Content Management System) agar klien bisa update konten sendiri?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="59" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-60"><div class="question-top"><span class="q-num">60</span><span class="q-text">Apakah klien nyaman menggunakan alat digital (dashboard, form, dsb.) atau perlu pelatihan?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="60" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-61"><div class="question-top"><span class="q-num">61</span><span class="q-text">Apakah ada anggaran/budget bulanan yang tersedia untuk biaya operasional sistem? (hosting, domain, bot, dsb.)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="61" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ── BAGIAN 7 ─────────────────────────────────────── -->
+  <div class="section-card" id="bagian7">
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <div class="section-meta">
+        <div class="section-number">Bagian 7</div>
+        <div class="section-title">Target &amp; Ekspektasi Hasil</div>
+        <div class="section-goal">Tujuan: Menyamakan ekspektasi antara klien dan developer mengenai hasil akhir.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ol class="question-list">
+        <li class="question-item" id="qi-62"><div class="question-top"><span class="q-num">62</span><span class="q-text">Apa tujuan utama dibuatnya website ini? (branding, menambah pelanggan, efisiensi operasional, semua?)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="62" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-63"><div class="question-top"><span class="q-num">63</span><span class="q-text">Dalam 3–6 bulan ke depan, apa indikator keberhasilan yang diharapkan? (jumlah booking naik, respon WA lebih cepat, dsb.)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="63" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-64"><div class="question-top"><span class="q-num">64</span><span class="q-text">Apakah ada fitur yang mutlak HARUS ada di fase pertama (MVP)?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="64" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-65"><div class="question-top"><span class="q-num">65</span><span class="q-text">Apakah ada fitur yang bisa ditunda ke fase berikutnya?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="65" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-66"><div class="question-top"><span class="q-num">66</span><span class="q-text">Berapa lama timeline pengerjaan yang diharapkan klien?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="66" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-67"><div class="question-top"><span class="q-num">67</span><span class="q-text">Apakah ada momen atau event tertentu di mana website sudah harus live? (ulang tahun usaha, promo, dsb.)</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="67" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+        <li class="question-item" id="qi-68"><div class="question-top"><span class="q-num">68</span><span class="q-text">Seberapa sering klien ingin melakukan review/update progress selama pengembangan?</span></div><div class="answer-wrap"><div class="answer-label">Jawaban Klien</div><textarea class="answer-box" data-q="68" placeholder="Tulis jawaban klien di sini..."></textarea></div></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ── BAGIAN 8 ─────────────────────────────────────── -->
+  <div class="section-card" id="bagian8">
+    <div class="section-header">
+      <div class="section-icon">📁</div>
+      <div class="section-meta">
+        <div class="section-number">Bagian 8</div>
+        <div class="section-title">Aset &amp; Konten yang Perlu Disiapkan Klien</div>
+        <div class="section-goal">Checklist aset yang perlu dikumpulkan sebelum pengembangan dimulai.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <table class="asset-table">
+        <thead>
+          <tr><th>#</th><th>Item Aset</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Logo dalam format PNG/SVG (transparan)</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>2</td><td>Foto storefront / tempat usaha</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>3</td><td>Foto portofolio hasil kerja (nail art, lash, dll.)</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>4</td><td>Daftar layanan lengkap beserta harga</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>5</td><td>Deskripsi singkat setiap layanan</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>6</td><td>Jam operasional &amp; hari libur</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>7</td><td>Nomor WhatsApp resmi bisnis</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>8</td><td>Username Instagram &amp; link sosmed lainnya</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>9</td><td>Alamat lengkap + Google Maps link</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>10</td><td>Testimoni/review pelanggan (screenshot atau teks)</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>11</td><td>Foto/video promosi yang pernah dibuat</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+          <tr><td>12</td><td>Preferensi warna dan referensi desain</td><td><div class="check-box" onclick="toggleCheck(this)"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── CATATAN WAWANCARA ────────────────────────────── -->
+  <div class="section-card" id="catatan">
+    <div class="section-header">
+      <div class="section-icon">📝</div>
+      <div class="section-meta">
+        <div class="section-number">Sesi Wawancara</div>
+        <div class="section-title">Catatan Wawancara</div>
+        <div class="section-goal">Catat jawaban, poin penting, atau hal khusus yang disampaikan klien.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="notes-grid">
+        <div class="notes-field">
+          <label>Tanggal Wawancara</label>
+          <input type="date" id="interview-date" />
+        </div>
+        <div class="notes-field">
+          <label>Pewawancara</label>
+          <input type="text" id="interviewer-name" placeholder="Nama pewawancara..." />
+        </div>
+        <div class="notes-field">
+          <label>Narasumber</label>
+          <input type="text" id="interviewee-name" placeholder="Nama narasumber..." />
+        </div>
+        <div class="notes-field">
+          <label>Metode Wawancara</label>
+          <div class="method-group">
+            <label class="method-chip" onclick="toggleChip(this)">
+              <input type="checkbox"> 🤝 Tatap Muka
+            </label>
+            <label class="method-chip" onclick="toggleChip(this)">
+              <input type="checkbox"> 📹 Video Call
+            </label>
+            <label class="method-chip" onclick="toggleChip(this)">
+              <input type="checkbox"> 💬 Chat/Pesan
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="notes-field">
+        <label>Catatan Umum</label>
+        <textarea id="notes-content" placeholder="Tulis catatan wawancara di sini...&#10;&#10;Jawaban klien, poin penting, keputusan yang disepakati, dsb."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SIGN-OFF ─────────────────────────────────────── -->
+  <div class="section-card" id="signoff">
+    <div class="section-header">
+      <div class="section-icon">✅</div>
+      <div class="section-meta">
+        <div class="section-number">Persetujuan</div>
+        <div class="section-title">Sign-off &amp; Persetujuan</div>
+        <div class="section-goal">Dokumen ini berfungsi sebagai dasar requirements yang disetujui kedua pihak sebelum proses pengembangan dimulai.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <table class="signoff-table">
+        <thead>
+          <tr><th>Pihak</th><th>Nama Lengkap</th><th>Tanda Tangan</th><th>Tanggal</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>👤 Klien</td>
+            <td><input class="signoff-input" type="text" placeholder="Nama klien..." /></td>
+            <td><input class="signoff-input" type="text" placeholder="_______________" /></td>
+            <td><input class="signoff-input" type="date" /></td>
+          </tr>
+          <tr>
+            <td>💻 Developer</td>
+            <td><input class="signoff-input" type="text" placeholder="Nama developer..." /></td>
+            <td><input class="signoff-input" type="text" placeholder="_______________" /></td>
+            <td><input class="signoff-input" type="date" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer>
+  <p>Dokumen Requirements Gathering · <span>Kokuro Beauty Space</span> · v1.0 · April 2026</p>
+  <p style="margin-top:6px; font-size:12px;">Jawaban tersimpan otomatis di browser (localStorage). Gunakan Export JSON untuk backup.</p>
+</footer>
+
+<script>
+  const STORAGE_KEY = 'kokuro_requirements_v1';
+  const TOTAL_Q = 68;
+  let saveTimer = null;
+
+  /* ─── Load saved data ──────────────────── */
+  function loadData() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      document.querySelectorAll('.answer-box').forEach(ta => {
+        const key = 'q' + ta.dataset.q;
+        if (saved[key]) {
+          ta.value = saved[key];
+          markAnswered(ta);
+        }
+      });
+      if (saved.interviewDate) document.getElementById('interview-date').value = saved.interviewDate;
+      if (saved.interviewer)   document.getElementById('interviewer-name').value = saved.interviewer;
+      if (saved.interviewee)   document.getElementById('interviewee-name').value = saved.interviewee;
+      if (saved.notes)         document.getElementById('notes-content').value = saved.notes;
+      updateProgress();
+    } catch(e) {}
+  }
+
+  /* ─── Save data ────────────────────────── */
+  function saveData() {
+    const data = {};
+    document.querySelectorAll('.answer-box').forEach(ta => {
+      if (ta.value.trim()) data['q' + ta.dataset.q] = ta.value;
+    });
+    data.interviewDate = document.getElementById('interview-date').value;
+    data.interviewer   = document.getElementById('interviewer-name').value;
+    data.interviewee   = document.getElementById('interviewee-name').value;
+    data.notes         = document.getElementById('notes-content').value;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+    const el = document.getElementById('save-status');
+    const now = new Date();
+    el.textContent = `· Disimpan ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+    el.style.color = '#16a34a';
+    setTimeout(() => { el.style.color = ''; }, 2000);
+  }
+
+  /* ─── Mark card as answered ─────────────── */
+  function markAnswered(ta) {
+    const li = ta.closest('.question-item');
+    if (ta.value.trim()) {
+      li.classList.add('answered');
+    } else {
+      li.classList.remove('answered');
+    }
+  }
+
+  /* ─── Update progress bar ───────────────── */
+  function updateProgress() {
+    let count = 0;
+    document.querySelectorAll('.answer-box').forEach(ta => {
+      if (ta.value.trim()) count++;
+    });
+    const pct = Math.round((count / TOTAL_Q) * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-count').textContent = count + ' / ' + TOTAL_Q;
+  }
+
+  /* ─── Debounced autosave on input ───────── */
+  document.querySelectorAll('.answer-box, #notes-content, #interview-date, #interviewer-name, #interviewee-name').forEach(el => {
+    el.addEventListener('input', () => {
+      if (el.classList.contains('answer-box')) {
+        markAnswered(el);
+        updateProgress();
+      }
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveData, 800);
+    });
+  });
+
+  /* ─── Export JSON ───────────────────────── */
+  function exportJSON() {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'kokuro_requirements_answers.json';
+    a.click();
+  }
+
+  /* ─── Clear All ─────────────────────────── */
+  function clearAll() {
+    if (!confirm('Reset semua jawaban? Data akan dihapus permanen.')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    document.querySelectorAll('.answer-box').forEach(ta => {
+      ta.value = '';
+      ta.closest('.question-item').classList.remove('answered');
+    });
+    document.getElementById('notes-content').value = '';
+    document.getElementById('interviewer-name').value = '';
+    document.getElementById('interviewee-name').value = '';
+    updateProgress();
+    document.getElementById('save-status').textContent = '· Direset';
+  }
+
+  /* ─── Checkbox & Chip ───────────────────── */
+  function toggleCheck(el) { el.classList.toggle('checked'); }
+
+  function toggleChip(el) {
+    setTimeout(() => {
+      const cb = el.querySelector('input');
+      if (cb.checked) el.classList.add('selected');
+      else el.classList.remove('selected');
+    }, 0);
+  }
+
+  /* ─── Scroll progress bar ───────────────── */
+  window.addEventListener('scroll', () => {
+    const scroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progress-bar').style.width = (scroll / height * 100) + '%';
+  });
+
+  /* ─── Sidebar active dot ────────────────── */
+  const sections = document.querySelectorAll('[id^="bagian"], #catatan, #signoff');
+  const dots = document.querySelectorAll('.sidebar a');
+
+  new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        dots.forEach(d => d.classList.remove('active'));
+        const t = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`);
+        if (t) t.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 }).observe.bind(new IntersectionObserver(() => {}));
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        dots.forEach(d => d.classList.remove('active'));
+        const t = document.querySelector(`.sidebar a[href="#${e.target.id}"]`);
+        if (t) t.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => obs.observe(s));
+
+  /* ─── Init ──────────────────────────────── */
+  document.getElementById('interview-date').valueAsDate = new Date();
+  loadData();
+</script>
+
+</body>
+</html>

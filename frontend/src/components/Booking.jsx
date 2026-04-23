@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { api, buildWhatsAppUrl } from '../api/kokuro';
+
+// Lazy load map to avoid blocking initial page render
+const MapPicker = lazy(() => import('./MapPicker'));
 
 export default function Booking() {
   const [form, setForm]       = useState({ name:'', phone:'', service:'', date:'', time:'', addons:'', address:'', notes:'' });
   const [errors, setErrors]   = useState({});
   const [loading, setLoading] = useState(false);
-  const [toast, setToast]     = useState(null); // {type:'success'|'error', msg}
+  const [toast, setToast]     = useState(null);
+  const [showMap, setShowMap] = useState(false);
 
-  // Set min date to tomorrow
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const minDate = tomorrow.toISOString().split('T')[0];
@@ -16,6 +19,12 @@ export default function Booking() {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
     if (errors[name]) setErrors(er => ({ ...er, [name]: '' }));
+  }
+
+  // Called by MapPicker when user picks a location
+  function handleMapAddress(addr) {
+    setForm(f => ({ ...f, address: addr }));
+    if (errors.address) setErrors(er => ({ ...er, address: '' }));
   }
 
   function validate() {
@@ -34,22 +43,15 @@ export default function Booking() {
     e.preventDefault();
     if (!validate()) return;
     setLoading(true);
-
-    // ── Always generate WhatsApp URL client-side (works without backend) ──
     const waUrl = buildWhatsAppUrl(form);
-
-    // ── Try to save to DB in background (non-blocking) ──
-    api.submitBooking(form).catch(() => { /* silent – backend optional */ });
-
-    // ── Immediately open WhatsApp & show success ──
+    api.submitBooking(form).catch(() => {});
     window.open(waUrl, '_blank');
     setToast({ type: 'success', msg: '✅ WhatsApp terbuka! Kirim pesan untuk konfirmasi booking.' });
     setForm({ name:'', phone:'', service:'', date:'', time:'', addons:'', address:'', notes:'' });
+    setShowMap(false);
     setLoading(false);
     setTimeout(() => setToast(null), 6000);
   }
-
-
 
   return (
     <section className="booking-section" id="booking">
@@ -61,7 +63,7 @@ export default function Booking() {
         </div>
 
         {toast && (
-          <div className={`alert-toast alert-${toast.type}`} style={{
+          <div style={{
             padding:'.875rem 1.5rem', borderRadius:'12px', marginBottom:'1.5rem',
             background: toast.type === 'success' ? 'rgba(22,163,74,.10)' : 'rgba(220,38,38,.10)',
             border: `1px solid ${toast.type === 'success' ? 'rgba(22,163,74,.30)' : 'rgba(220,38,38,.30)'}`,
@@ -74,11 +76,12 @@ export default function Booking() {
           </div>
         )}
 
-
         <div className="booking-wrapper">
           {/* ── Form ── */}
           <div className="booking-form-wrap">
             <form className="booking-form" onSubmit={handleSubmit} noValidate>
+
+              {/* Nama & WA */}
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="bookName">Nama Lengkap *</label>
@@ -94,6 +97,7 @@ export default function Booking() {
                 </div>
               </div>
 
+              {/* Layanan & Tanggal */}
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="bookService">Layanan *</label>
@@ -127,6 +131,7 @@ export default function Booking() {
                 </div>
               </div>
 
+              {/* Waktu & Add-on */}
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="bookTime">Waktu yang Diinginkan</label>
@@ -140,18 +145,46 @@ export default function Booking() {
                 <div className="form-group">
                   <label htmlFor="bookAddons">Add-on Desain</label>
                   <input type="text" id="bookAddons" name="addons" value={form.addons} onChange={change}
-                    placeholder="Contoh: French tip, cat eye..." />
+                    placeholder="French tip, cat eye..." />
                 </div>
               </div>
 
+              {/* ── Alamat & Map Picker ── */}
               <div className="form-group full-width">
-                <label htmlFor="bookAddress">Alamat Lengkap *</label>
-                <textarea id="bookAddress" name="address" value={form.address} onChange={change} rows={3}
-                  placeholder="Tuliskan alamat lengkap untuk home service..."
-                  className={errors.address ? 'error':''} />
+                <label htmlFor="bookAddress">
+                  Alamat Lokasi *
+                  <button
+                    type="button"
+                    className="map-toggle-btn"
+                    onClick={() => setShowMap(s => !s)}
+                  >
+                    {showMap ? '✕ Tutup Peta' : '🗺️ Pilih dari Peta'}
+                  </button>
+                </label>
+
+                {/* Map picker */}
+                {showMap && (
+                  <Suspense fallback={<div className="map-loading">Memuat peta...</div>}>
+                    <MapPicker
+                      onAddressChange={handleMapAddress}
+                      initialAddress={form.address}
+                    />
+                  </Suspense>
+                )}
+
+                {/* Textarea — auto-filled from map or manual */}
+                <textarea
+                  id="bookAddress" name="address" value={form.address} onChange={change} rows={3}
+                  placeholder={showMap
+                    ? 'Alamat akan otomatis terisi setelah memilih lokasi di peta...'
+                    : 'Tuliskan alamat lengkap untuk home service...'}
+                  className={errors.address ? 'error' : ''}
+                  style={{ marginTop: showMap ? '.5rem' : '0' }}
+                />
                 {errors.address && <span className="error-msg">{errors.address}</span>}
               </div>
 
+              {/* Catatan */}
               <div className="form-group full-width">
                 <label htmlFor="bookNotes">Catatan Tambahan</label>
                 <textarea id="bookNotes" name="notes" value={form.notes} onChange={change} rows={2}
@@ -175,6 +208,7 @@ export default function Booking() {
               <h3>Cara Booking</h3>
               <ol className="binfo-steps">
                 <li>Isi form dengan lengkap</li>
+                <li>Pilih lokasi lewat peta (opsional)</li>
                 <li>Klik "Kirim via WhatsApp"</li>
                 <li>Konfirmasi jadwal dengan Ellen</li>
                 <li>Bayar setelah layanan selesai</li>
