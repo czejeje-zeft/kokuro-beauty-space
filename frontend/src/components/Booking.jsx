@@ -1,4 +1,5 @@
 import { useState, lazy, Suspense } from 'react';
+import { Link } from 'react-router-dom';
 import { api, buildWhatsAppUrl } from '../api/kokuro';
 
 // Lazy load map to avoid blocking initial page render
@@ -60,6 +61,23 @@ export default function Booking() {
           <span className="section-tag">📅 Booking</span>
           <h2 className="section-title">Reservasi Sekarang</h2>
           <p className="section-desc">Isi form di bawah, kami akan konfirmasi via WhatsApp dalam 1x24 jam</p>
+          <Link
+            to="/booking"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '.4rem',
+              marginTop: '.75rem',
+              padding: '.4rem 1.1rem',
+              borderRadius: '50px',
+              background: 'rgba(26,148,243,.08)',
+              border: '1.5px solid rgba(26,148,243,.25)',
+              color: '#1A94F3',
+              fontSize: '.82rem', fontWeight: 700,
+              textDecoration: 'none',
+              transition: 'all .2s',
+            }}
+          >
+            🔗 Buka halaman booking terpisah
+          </Link>
         </div>
 
         {toast && (

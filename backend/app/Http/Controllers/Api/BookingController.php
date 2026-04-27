@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -22,6 +23,13 @@ class BookingController extends Controller
         ]);
 
         $booking = Booking::create($validated);
+
+        // ── Telegram notification (non-blocking, silent fail) ──
+        try {
+            (new TelegramService())->notifyNewBooking($validated);
+        } catch (\Throwable) {
+            // Telegram failure must never break the booking flow
+        }
 
         // Format date to Indonesian
         $date = \Carbon\Carbon::parse($validated['date'])->locale('id')->isoFormat('dddd, D MMMM YYYY');

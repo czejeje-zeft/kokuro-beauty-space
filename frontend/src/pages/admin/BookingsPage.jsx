@@ -74,7 +74,18 @@ export default function BookingsPage() {
                   <td style={{color:'var(--adm-muted)',fontSize:'.75rem'}}>{b.id}</td>
                   <td>
                     <div style={{fontWeight:600}}>{b.name}</div>
-                    <div style={{fontSize:'.75rem',color:'var(--adm-muted)'}}>{b.phone}</div>
+                    <a
+                      href={`https://wa.me/${(b.phone||'').replace(/\D/g,'')}`}
+                      target="_blank" rel="noopener noreferrer"
+                      title="Chat WhatsApp"
+                      style={{fontSize:'.75rem',color:'var(--adm-accent)',textDecoration:'none',
+                        display:'inline-flex',alignItems:'center',gap:'.2rem',marginTop:'.1rem',
+                        fontWeight:600,transition:'opacity .15s'}}
+                      onMouseEnter={e=>e.currentTarget.style.opacity='.7'}
+                      onMouseLeave={e=>e.currentTarget.style.opacity='1'}
+                    >
+                      💬 {b.phone}
+                    </a>
                   </td>
                   <td>{b.service}</td>
                   <td style={{whiteSpace:'nowrap'}}>
@@ -82,17 +93,28 @@ export default function BookingsPage() {
                     {b.time && <div style={{fontSize:'.75rem',color:'var(--adm-muted)'}}>{b.time} WIB</div>}
                   </td>
                   <td style={{maxWidth:'180px'}}>
-                    <div style={{fontSize:'.82rem',color:'var(--adm-mid)',lineHeight:1.4,
-                      overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical'}}>
-                      {b.address}
-                    </div>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      title="Buka di Google Maps"
+                      style={{fontSize:'.82rem',color:'var(--adm-accent)',lineHeight:1.4,
+                        overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',
+                        textDecoration:'none',fontWeight:500,transition:'opacity .15s'}}
+                      onMouseEnter={e=>e.currentTarget.style.opacity='.7'}
+                      onMouseLeave={e=>e.currentTarget.style.opacity='1'}
+                    >
+                      📍 {b.address}
+                    </a>
                   </td>
                   <td>
                     <select value={b.status}
                       onChange={e => changeStatus(b, e.target.value)}
-                      style={{background:'transparent',border:'none',color:'inherit',fontFamily:'inherit',fontSize:'.85rem',cursor:'pointer'}}>
+                      className={`adm-badge ${STATUS_COLORS[b.status]??'draft'}`}
+                      style={{border:'none',fontFamily:'inherit',fontSize:'.75rem',
+                        cursor:'pointer',appearance:'none',WebkitAppearance:'none',
+                        paddingRight:'1rem',background:'transparent'}}>
                       {STATUS_OPTS.slice(1).map(s =>
-                        <option key={s} value={s} style={{background:'#1a1d27'}}>{STATUS_LABELS[s]}</option>)}
+                        <option key={s} value={s} style={{background:'#fff',color:'#0F2B4D',fontWeight:600}}>{STATUS_LABELS[s]}</option>)}
                     </select>
                   </td>
                   <td>

@@ -91,7 +91,15 @@ export default function Dashboard() {
                   {/* Pelanggan */}
                   <td>
                     <div style={{fontWeight:700,color:'var(--adm-text)'}}>{b.name}</div>
-                    <div style={{fontSize:'.78rem',color:'var(--adm-muted)',marginTop:'.1rem'}}>📱 {b.phone}</div>
+                    <a
+                      href={`https://wa.me/${(b.phone||'').replace(/\D/g,'')}`}
+                      target="_blank" rel="noopener noreferrer"
+                      title="Chat WhatsApp"
+                      style={{fontSize:'.78rem',color:'var(--adm-accent)',textDecoration:'none',
+                        display:'inline-flex',alignItems:'center',gap:'.2rem',marginTop:'.1rem',fontWeight:600}}
+                    >
+                      💬 {b.phone}
+                    </a>
                   </td>
 
                   {/* Layanan */}
@@ -114,10 +122,16 @@ export default function Dashboard() {
 
                   {/* Alamat */}
                   <td style={{maxWidth:'180px'}}>
-                    <div style={{fontSize:'.82rem',color:'var(--adm-mid)',lineHeight:1.4,
-                      overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical'}}>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      title="Buka di Google Maps"
+                      style={{fontSize:'.82rem',color:'var(--adm-accent)',lineHeight:1.4,
+                        overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',
+                        textDecoration:'none',fontWeight:500}}
+                    >
                       📍 {b.address}
-                    </div>
+                    </a>
                   </td>
 
                   {/* Status */}
@@ -177,21 +191,37 @@ export default function Dashboard() {
             </div>
 
             {[
-              ['👤 Nama',      detail.name],
-              ['📱 WhatsApp',  detail.phone],
-              ['💅 Layanan',   detail.service],
-              ['✨ Add-on',    detail.addons || '-'],
-              ['📅 Tanggal',   formatDate(detail.date)],
-              ['🕐 Waktu',     detail.time ? detail.time + ' WIB' : 'Fleksibel'],
-              ['📍 Alamat',    detail.address],
-              ['📝 Catatan',   detail.notes || '-'],
-              ['🕒 Dibuat',    formatDate(detail.created_at)],
+              ['👤 Nama',      detail.name,     null],
+              ['💅 Layanan',   detail.service,  null],
+              ['✨ Add-on',    detail.addons || '-', null],
+              ['📅 Tanggal',   formatDate(detail.date), null],
+              ['🕐 Waktu',     detail.time ? detail.time + ' WIB' : 'Fleksibel', null],
+              ['📝 Catatan',   detail.notes || '-', null],
+              ['🕒 Dibuat',    formatDate(detail.created_at), null],
             ].map(([k, v]) => (
               <div key={k} className="adm-detail-row">
                 <span className="adm-detail-key">{k}</span>
                 <span className="adm-detail-val">{v}</span>
               </div>
             ))}
+
+            {/* Clickable rows */}
+            <div className="adm-detail-row">
+              <span className="adm-detail-key">📱 WA</span>
+              <a href={`https://wa.me/${(detail.phone||'').replace(/\D/g,'')}`}
+                target="_blank" rel="noopener noreferrer"
+                style={{color:'var(--adm-accent)',fontWeight:600,textDecoration:'none'}}>
+                {detail.phone}
+              </a>
+            </div>
+            <div className="adm-detail-row">
+              <span className="adm-detail-key">📍 Alamat</span>
+              <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(detail.address)}`}
+                target="_blank" rel="noopener noreferrer"
+                style={{color:'var(--adm-accent)',fontWeight:500,textDecoration:'none',lineHeight:1.5}}>
+                {detail.address}
+              </a>
+            </div>
 
             <div style={{marginTop:'1.25rem',display:'flex',gap:'.75rem',justifyContent:'flex-end'}}>
               <a

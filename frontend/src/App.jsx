@@ -17,8 +17,9 @@ import WhatsAppFAB         from './components/WhatsAppFAB';
 import FloatingDecorations from './components/FloatingDecorations';
 
 // Public blog pages
-import BlogList   from './pages/BlogList';
-import BlogDetail from './pages/BlogDetail';
+import BlogList    from './pages/BlogList';
+import BlogDetail  from './pages/BlogDetail';
+import BookingPage from './pages/BookingPage';
 
 // Admin pages
 import AdminLogin    from './pages/admin/AdminLogin';
@@ -63,6 +64,7 @@ export default function App() {
     <Routes>
       {/* ── Public ── */}
       <Route path="/"           element={<LandingPage />} />
+      <Route path="/booking"    element={<BookingPage />} />
       <Route path="/blog"       element={<BlogList />} />
       <Route path="/blog/:slug" element={<BlogDetail />} />
 
